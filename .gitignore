@@ -1,0 +1,4 @@
+twitter-app-api/.idea/
+twitter-app-api/**/__pycache__
+
+twitter-app-ui/node_modules/

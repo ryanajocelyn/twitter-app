@@ -1,0 +1,22 @@
+version: '3'
+services:
+    web:
+        stdin_open: true
+        build: 
+            context: ./twitter-app-ui
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        volumes: 
+            - /usr/app/node_modules/
+            - ./twitter-app-ui:/usr/app
+    api:
+        build:
+            context: ./twitter-app-api
+            dockerfile: Dockerfile
+        volumes: 
+            - ./twitter-app-api:/usr/app
+        ports:
+            - '5000:5000'
+        
+
