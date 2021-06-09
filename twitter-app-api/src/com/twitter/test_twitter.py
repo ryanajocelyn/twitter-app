@@ -13,8 +13,8 @@ import requests
 
 # Create A Config To Store Values
 config = {
-    'twitter_consumer_key': 'BMUHx2u7N1UlHQwY5AyzwxVvu',
-    'twitter_consumer_secret': '03UE6FNNqI80lM74vVg0jk3HVx8ndrK0huvb5PnUSONrqW2rHH'
+    'twitter_consumer_key': '',
+    'twitter_consumer_secret': ''
 }
 
 # Initialize Our Flask App

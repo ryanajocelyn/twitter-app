@@ -3,3 +3,5 @@ twitter-app-api/**/__pycache__
 
 twitter-app-ui/node_modules/
 twitter-app-db/data/*
+
+*.txt

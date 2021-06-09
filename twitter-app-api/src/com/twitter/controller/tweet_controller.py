@@ -6,6 +6,8 @@ tweet_controller = Blueprint(name="tweets", import_name=__name__)
 
 parser = reqparse.RequestParser()
 parser.add_argument('userId')
+parser.add_argument('start_date')
+parser.add_argument('end_date')
 
 
 class TweetSearchResource(Resource):

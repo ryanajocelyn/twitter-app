@@ -2,16 +2,24 @@
 Flask Application
 """
 
+import sys
+import os
+
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-import sys
+
+app = Flask(__name__)
+if app.config["ENV"] == "production":
+    app.config.from_object("src.config.ProductionConfig")
+else:
+    app.config.from_object("src.config.DevelopmentConfig")
+
+db = SQLAlchemy(app)
 
 from src.com.twitter.controller.auth_controller import auth_controller, AuthResource
 from src.com.twitter.controller.user_controller import user_controller, UserResource, TweetResource
 from src.com.twitter.controller.tweet_controller import tweet_controller, TweetSearchResource
-
-app = Flask(__name__)
 
 
 def add_api_bp(blueprint, prefix, resources):

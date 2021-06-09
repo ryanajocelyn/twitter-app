@@ -1,4 +1,4 @@
-from src.com.twitter.dao.database import db
+from src.app import db
 from sqlalchemy_serializer import SerializerMixin
 
 

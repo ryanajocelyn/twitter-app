@@ -1,5 +1,5 @@
-from src.com.twitter.dao.database import db
 from src.com.twitter.model.tweet_model import Tweets
+from src.app import db
 
 from flask import jsonify
 from datetime import datetime
@@ -8,9 +8,18 @@ from sqlalchemy.dialects.mysql import insert
 
 
 def search_tweets(search_criteria):
-    tweets = Tweets.query.filter_by(author_id=search_criteria['userId']).all()
+    tweets = Tweets.query
 
-    return [twt.to_dict() for twt in tweets]
+    if search_criteria['userId'] is not None:
+        tweets = tweets.filter_by(author_id=search_criteria['userId'])
+
+    if search_criteria['start_date'] is not None:
+        tweets = tweets.filter_by(time >= search_criteria['start_date'])
+
+    if search_criteria['end_date'] is not None:
+        tweets = tweets.filter_by(time <= search_criteria['end_date'])
+
+    return [twt.to_dict() for twt in tweets.all()]
 
 
 def save_tweet(tweet_data):
