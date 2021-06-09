@@ -1,5 +1,18 @@
 version: '3'
 services:
+    db:
+        image: mysql:latest
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_DATABASE: twt-app-db
+        volumes:
+            - ./twitter-app-db/data:/var/lib/mysql
+            - ./twitter-app-db/config:/etc/mysql/conf.d
+            - ./twitter-app-db/init:/docker-entrypoint-initdb.d
+        ports:
+            - '3306:3306'
     web:
         stdin_open: true
         build: 
@@ -18,5 +31,8 @@ services:
             - ./twitter-app-api:/usr/app
         ports:
             - '5000:5000'
-        
+        environment:
+            FLASK_DEBUG: 1
+        depends_on:
+            - db
 
