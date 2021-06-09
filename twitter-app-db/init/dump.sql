@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS tweets (
 	orig_tweet_id varchar(100),
 	tweet varchar(1000),
 	time datetime,
+	author_id varchar(100),
 	PRIMARY KEY (tweet_id)
 );

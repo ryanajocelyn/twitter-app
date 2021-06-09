@@ -1,6 +1,7 @@
 version: '3'
 services:
     db:
+        container_name: twitter-app-db
         image: mysql:latest
         restart: always
         command: --default-authentication-plugin=mysql_native_password

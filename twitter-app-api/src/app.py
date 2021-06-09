@@ -9,6 +9,7 @@ import sys
 
 from src.com.twitter.controller.auth_controller import auth_controller, AuthResource
 from src.com.twitter.controller.user_controller import user_controller, UserResource, TweetResource
+from src.com.twitter.controller.tweet_controller import tweet_controller, TweetSearchResource
 
 app = Flask(__name__)
 
@@ -23,4 +24,5 @@ def add_api_bp(blueprint, prefix, resources):
 
 
 add_api_bp(auth_controller, '/api/v1/auth', [(AuthResource, '/login')])
-add_api_bp(user_controller, '/api/v1/users', [(UserResource, '/user'), (TweetResource, '/tweets')])
+add_api_bp(user_controller, '/api/v1/users', [(UserResource, '/user'), (TweetResource, '/sync/tweets')])
+add_api_bp(tweet_controller, '/api/v1/tweets', [(TweetSearchResource, '/search')])

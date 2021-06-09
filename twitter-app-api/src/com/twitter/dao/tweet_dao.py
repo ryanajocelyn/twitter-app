@@ -1,35 +1,30 @@
 from src.com.twitter.dao.database import db
 from src.com.twitter.model.tweet_model import Tweets
 
+from flask import jsonify
 from datetime import datetime
 from sqlalchemy import func
 from sqlalchemy.dialects.mysql import insert
 
 
-def get_all_tweets():
-    tweets = Tweet.query.all()
+def search_tweets(search_criteria):
+    tweets = Tweets.query.filter_by(author_id=search_criteria['userId']).all()
 
-    return tweets
+    return [twt.to_dict() for twt in tweets]
 
 
 def save_tweet(tweet_data):
-    tweet = Tweets(
-        tweet_id=tweet_data['id'],
-        orig_tweet_id=tweet_data['origId'],
-        tweet=tweet_data['text'],
-        time=datetime.today()
-    )
-
     upsert(Tweets, {
         "tweet_id": tweet_data['id'],
         "orig_tweet_id": tweet_data['origId'],
         "tweet": tweet_data['text'],
-        "time": datetime.today()
+        "time": datetime.strptime(tweet_data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'),
+        "author_id": tweet_data['author_id']
     })
 
     # db.session.add(tweet)
     # db.session.commit()
-    return tweet
+    return None
 
 
 def upsert(model, insert_dict):
