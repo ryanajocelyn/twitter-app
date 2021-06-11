@@ -21,6 +21,8 @@ def get_secret(name):
 
 class Config(object):
     TWITTER_URL = 'https://api.twitter.com'
+    TWITTER_CONSUMER_KEY = get_secret('twitter_consumer_key')
+    TWITTER_CONSUMER_SECRET = get_secret('twitter_consumer_secret')
 
 
 class DevelopmentConfig(Config):

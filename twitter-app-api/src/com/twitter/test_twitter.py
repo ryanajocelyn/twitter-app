@@ -9,16 +9,17 @@ from flask_restful import Api, Resource, reqparse
 
 # Import requests in order to make server sided requests
 import requests
+import logger
 
+from twitter import *
+
+from src.app import app
 
 # Create A Config To Store Values
 config = {
-    'twitter_consumer_key': '',
-    'twitter_consumer_secret': ''
+    'twitter_consumer_key': 'BMUHx2u7N1UlHQwY5AyzwxVvu',
+    'twitter_consumer_secret': '03UE6FNNqI80lM74vVg0jk3HVx8ndrK0huvb5PnUSONrqW2rHH'
 }
-
-# Initialize Our Flask App
-app = Flask(__name__)
 
 # Initialize Our RESTful API
 api = Api(app)
@@ -56,7 +57,7 @@ class TwitterCallback(Resource):
         parser = callback_parser()
         args = parser.parse_args() # Parse our args into a dict
         # We need to make a request to twitter with this callback OAuth token
-        res = requests.post('https://api.twitter.com/oauth/access_token?oauth_token=' + args['oauth_token'] + '&oauth_verifier=' + args['oauth_verfier'])
+        res = requests.post('https://api.twitter.com/oauth/access_token?oauth_token=' + args['oauth_token'] + '&oauth_verifier=' + args['oauth_verifier'])
         res_split = res.text.split('&')
         # Now we need to parse our oauth token and secret from the response
         oauth_token = res_split[0].split('=')[1]
@@ -66,10 +67,22 @@ class TwitterCallback(Resource):
         # We now have access to the oauth token, oauth secret, userID, and username of the person who logged in.
         # .... Do more code here
         # ....
-        return redirect('http://somwhere.com', 302)
+
+        twitter = Twitter(auth=OAuth(
+            oauth_token,
+            oauth_secret,
+            config['twitter_consumer_key'],
+            config['twitter_consumer_secret']
+        ))
+
+        statuses = twitter.statuses.home_timeline(count=50)
+        print(statuses)
+        app.logger.info(statuses)
+
+        for status in statuses:
+            print("(%s) @%s %s" % (status["created_at"], status["user"]["screen_name"], status["text"]))
+            app.logger.info("(%s) @%s %s" % (status["created_at"], status["user"]["screen_name"], status["text"]))
+
+        return redirect('http://localhost:3000', 302)
 
 
-api.add_resource(TwitterAuthenticate, '/authenticate/twitter')
-api.add_resource(TwitterCallback, '/callback/twitter')
-
-app.run()

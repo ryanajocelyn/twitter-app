@@ -5,3 +5,4 @@ twitter-app-ui/node_modules/
 twitter-app-db/data/*
 
 *.txt
+record.log

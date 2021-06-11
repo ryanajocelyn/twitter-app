@@ -19,6 +19,10 @@ services:
         build: 
             context: ./twitter-app-ui
             dockerfile: Dockerfile
+        environment:
+            CHOKIDAR_USEPOLLING: "true"
+            NODE_ENV: dev
+            ENV_NAME: local
         ports:
             - '3000:3000'
         volumes: 
@@ -34,14 +38,21 @@ services:
             - '5000:5000'
         environment:
             FLASK_DEBUG: 1
+            PYTHONUNBUFFERED: 1
             FLASK_ENV: development
         secrets:
+            - twitter_consumer_key
+            - twitter_consumer_secret
             - twitter_bearer_token
             - mysql_root_pwd
         depends_on:
             - db
 
 secrets:
+    twitter_consumer_key:
+        file: ./twitter_consumer_key.txt
+    twitter_consumer_secret:
+        file: ./twitter_consumer_secret.txt
     twitter_bearer_token:
         file: ./twitter_bearer_token.txt
     mysql_root_pwd:
