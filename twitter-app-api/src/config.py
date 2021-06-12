@@ -12,7 +12,6 @@ def get_secret(name):
     sec_from_docker = None
     if existence:
         sec_from_docker = open(secret_path, encoding='utf-16').read().rstrip('\n')
-        print(sec_from_docker)
         return sec_from_docker
 
     if all([sec_from_docker is None, not existence]):
@@ -29,6 +28,7 @@ class DevelopmentConfig(Config):
     MYSQL_ROOT_PWD = get_secret('mysql_root_pwd')
     SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PWD}@db/twtappdb?auth_plugin=mysql_native_password'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_ECHO = True
     BEARER_TOKEN = get_secret('TWITTER_BEARER_TOKEN')
 
 

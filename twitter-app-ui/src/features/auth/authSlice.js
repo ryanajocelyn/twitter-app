@@ -16,12 +16,15 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         setUserProfile: (state, action) => {
-            state.user = { ...state.user, ...action.payload}
+            state.user = { ...state.user, ...action.payload};
+        }, 
+        clearUserProfile: (state) => {
+            state.user =  initialState;
         }
     }
 });
 
-export const { setUserProfile } = authSlice.actions;
+export const { setUserProfile, clearUserProfile } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
 

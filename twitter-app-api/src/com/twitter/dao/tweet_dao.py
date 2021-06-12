@@ -14,11 +14,14 @@ def search_tweets(search_criteria):
         tweets = tweets.filter_by(app_user_id=search_criteria['userId'])
 
     if search_criteria['start_date'] is not None:
-        tweets = tweets.filter_by(created_at >= search_criteria['start_date'])
+        st_date = datetime.strptime(search_criteria['start_date'], '%Y-%m-%dT%H:%M')
+        tweets = tweets.filter(Tweets.created_at >= st_date)
 
     if search_criteria['end_date'] is not None:
-        tweets = tweets.filter_by(created_at <= search_criteria['end_date'])
+        end_date = datetime.strptime(search_criteria['end_date'], '%Y-%m-%dT%H:%M')
+        tweets = tweets.filter(Tweets.created_at <= end_date)
 
+    tweets = tweets.order_by(Tweets.tweet)
     return [twt.to_dict() for twt in tweets.all()]
 
 

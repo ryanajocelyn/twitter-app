@@ -46,8 +46,7 @@ class TwitterAccessTokenResource(Resource):
 
         oauth_token = json.loads(request.cookies.get('oauth_token'))
         oauth = Client(app.config['TWITTER_CONSUMER_KEY'],
-                       client_secret=app.config[''
-                                                ''],
+                       client_secret=app.config['TWITTER_CONSUMER_SECRET'],
                        resource_owner_key=args['oauth_token'],
                        resource_owner_secret=oauth_token['oauth_token_secret'],
                        verifier=args['oauth_verifier'])
@@ -80,15 +79,19 @@ class TwitterProfileResource(Resource):
     def get(self):
         app.logger.info('OAuth: Request User Profile..')
 
-        oauth_token = json.loads(request.cookies.get('oauth_token'))
-        oauth = Client(app.config['TWITTER_CONSUMER_KEY'],
-                       client_secret=app.config['TWITTER_CONSUMER_SECRET'],
-                       resource_owner_key=oauth_token['oauth_token'],
-                       resource_owner_secret=oauth_token['oauth_token_secret'])
-        uri, headers, body = oauth.sign('https://api.twitter.com/1.1/account/verify_credentials.json')
-        res = requests.get(uri, headers=headers, data=body)
+        oauth_cookie = request.cookies.get('oauth_token')
+        if oauth_cookie is not None:
+            oauth_token = json.loads(oauth_cookie)
+            oauth = Client(app.config['TWITTER_CONSUMER_KEY'],
+                           client_secret=app.config['TWITTER_CONSUMER_SECRET'],
+                           resource_owner_key=oauth_token['oauth_token'],
+                           resource_owner_secret=oauth_token['oauth_token_secret'])
+            uri, headers, body = oauth.sign('https://api.twitter.com/1.1/account/verify_credentials.json')
+            res = requests.get(uri, headers=headers, data=body)
 
-        return res.json()
+            return res.json()
+
+        return None
 
 
 class TwitterAuthResource(Resource):
@@ -134,3 +137,15 @@ class TwitterCallbackResource(Resource):
         username = res_split[3].split('=')[1]
 
         return redirect('http://localhost:3000', 302)
+
+
+class TwitterLogoutResource(Resource):
+    def post(self):
+        app.logger.info('OAuth: Logout Resource..')
+
+        @after_this_request
+        def delete_oauth_token_cookie(response):
+            response.delete_cookie('oauth_token')
+            return response
+
+        return {'success': True}

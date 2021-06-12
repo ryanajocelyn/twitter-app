@@ -9,8 +9,8 @@ const initialState = {
 
 export const fetchTimelineAsync = createAsyncThunk(
   'timeline/fetchTimeline',
-  async (count) => {
-    const response = await fetchTimeline(count);
+  async (criteria) => {
+    const response = await fetchTimeline(criteria);
 
     // The value we return becomes the `fulfilled` action payload
     return response.data;
@@ -42,7 +42,7 @@ export const timelineSlice = createSlice({
       })
       .addCase(fetchTimelineAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.timeline.push(...action.payload);
+        state.timeline = action.payload;
       })
       .addCase(syncTimelineAsync.pending, (state) => {
         state.syncStatus = 'loading';

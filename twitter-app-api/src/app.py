@@ -31,7 +31,8 @@ from src.com.twitter.controller.auth_controller import \
     TwitterCallbackResource, \
     TwitterRequestTokenResource, \
     TwitterAccessTokenResource, \
-    TwitterProfileResource
+    TwitterProfileResource, \
+    TwitterLogoutResource
 
 from src.com.twitter.controller.user_controller import \
     user_controller, \
@@ -58,14 +59,9 @@ add_api_bp(auth_controller, '/api/v1/twitter',
             (TwitterAccessTokenResource, '/oauth/access_token'),
             (TwitterProfileResource, '/users/profile_banner'),
             (TwitterAuthResource, '/login'),
-            (TwitterCallbackResource, '/callback')])
+            (TwitterCallbackResource, '/callback'),
+            (TwitterLogoutResource, '/logout')])
 add_api_bp(user_controller, '/api/v1/users', [(UserResource, '/user'),
                                               (TweetResource, '/sync/tweets'),
                                               (UserTimelineResource, '/sync/timeline')])
 add_api_bp(tweet_controller, '/api/v1/tweets', [(TweetSearchResource, '/search')])
-
-# Initialize Our RESTful API
-# api_tw = Api(app)
-#
-# api_tw.add_resource(TwitterAuthenticate, '/authenticate/twitter')
-# api_tw.add_resource(TwitterCallback, '/callback1/twitter')

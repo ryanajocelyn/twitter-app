@@ -7,7 +7,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTimeline, storeSortedTimeline } from './tweetTimelineSlice';
+import { fetchTimelineAsync, selectTimeline, storeSortedTimeline } from './tweetTimelineSlice';
+import { selectUser } from '../auth/authSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,6 +35,7 @@ export function TimelineAction(props) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const timeline = useSelector(selectTimeline);
+    const user = useSelector(selectUser);
 
     const handleChange = (event) => {
         setDateSort(event.target.checked);
@@ -53,7 +55,14 @@ export function TimelineAction(props) {
         console.log(`dateSort=${dateSort}: twtSearch=${twtSearch}: startDate=${startDate}: endDate=${endDate}`);
         var tmp_timeline = [...timeline];
         if (twtSearch && twtSearch.length > 0) {
-            tmp_timeline = tmp_timeline.filter(twt => twt.tweet.indexOf(twtSearch) != -1);
+            tmp_timeline = tmp_timeline.filter(twt => twt.tweet.indexOf(twtSearch) !== -1);
+        } else if (startDate && endDate) {
+            dispatch(fetchTimelineAsync({
+                userId: user.userId,
+                startDate,
+                endDate,
+                count: 50
+            }));
         } else {
             if (dateSort) {
                 tmp_timeline.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));

@@ -7,11 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Link from '@material-ui/core/Link';
 import MenuDrawer from './menuDrawer';
 import { closeMenu, selectMenuState, showMenu } from './commonSlice';
 import axios from 'axios'
 import queryString from 'query-string';
-import { setUserProfile, selectUser } from '../../../features/auth/authSlice';
+import { setUserProfile, selectUser, clearUserProfile } from '../../../features/auth/authSlice';
+import { useCookies } from 'react-cookie';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +32,7 @@ export default function HeaderAppBar() {
     const dispatch = useDispatch();
     const menuState = useSelector(selectMenuState);
     const user = useSelector(selectUser);
+    const [cookies, setCookie, removeCookie] = useCookies(['oauth_token']); 
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -41,6 +44,33 @@ export default function HeaderAppBar() {
         } else {
             dispatch(closeMenu());
         }
+    };
+
+    const appAuth = () => {
+        if (user && user.isLoggedIn) {
+            twitterLogout();
+        } else {
+            twitterLogin();
+        }
+    };
+
+    const twitterLogout = () => {
+        removeCookie('oauth_token', { path: '/' });
+        (async () => {
+
+            try {
+                await axios({
+                    url: `/api/v1/twitter/logout`,
+                    method: 'POST'
+                });
+
+            } catch (error) {
+                console.error(error);
+            }
+
+        })();
+        
+        dispatch(clearUserProfile());
     };
 
     const twitterLogin = () => {
@@ -119,9 +149,11 @@ export default function HeaderAppBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        Twitter App
+                        <Link href="/" color="inherit">
+                            Twitter App
+                        </Link>
                     </Typography>     
-                    <Button color="inherit" onClick={twitterLogin}>
+                    <Button color="inherit" onClick={appAuth}>
                         {user.isLoggedIn ? 'Logout' : 'Login' }
                     </Button>
                 </Toolbar>
