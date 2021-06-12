@@ -12,8 +12,6 @@ services:
             - ./twitter-app-db/data:/var/lib/mysql
             - ./twitter-app-db/config:/etc/mysql/conf.d
             - ./twitter-app-db/init:/docker-entrypoint-initdb.d
-        ports:
-            - '3306:3306'
     web:
         stdin_open: true
         build: 
