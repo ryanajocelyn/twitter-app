@@ -1,0 +1,24 @@
+sudo: required
+services:
+    - docker
+
+after_success:
+    - docker build -t abijeethdarwin/twitter-app-ui ./twitter-app-ui
+    - docker build -t abijeethdarwin/twitter-app-api ./twitter-app-api
+    # Login to Docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # Push the docker images
+    - docker push abijeethdarwin/twitter-app-ui
+    - docker push abijeethdarwin/twitter-app-api
+
+deploy:
+    provider: elasticbeanstalk
+    region: "ap-south-1"
+    app: "Twitter-App"
+    env: "Twitterapp-env"
+    bucket_name: "elasticbeanstalk-ap-south-1-377733686601"
+    bucket_path: "twitter-app"
+    on:
+        branch: master
+    access_key_id: $AWS_KEY_ID
+    secret_access_key: $AWS_SECRET_KEY

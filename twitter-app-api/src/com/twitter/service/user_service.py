@@ -42,7 +42,6 @@ def sync_tweets_by_id(user_id):
 
 
 def sync_timeline_by_id(user_id, user_name):
-    base_url = app.config['TWITTER_URL']
     oauth_token = json.loads(request.cookies.get('oauth_token'))
 
     twitter = Twitter(auth=OAuth(
@@ -54,7 +53,6 @@ def sync_timeline_by_id(user_id, user_name):
     statuses = twitter.statuses.home_timeline(count=50)
     # app.logger.info(statuses)
 
-    tw_data = None
     for status in statuses:
         app.logger.info("(%s) @%s %s" % (status["created_at"], status["user"]["screen_name"], status["text"]))
         tw_data = dict({

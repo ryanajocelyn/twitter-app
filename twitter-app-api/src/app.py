@@ -54,14 +54,14 @@ def add_api_bp(blueprint, prefix, resources):
     app.register_blueprint(blueprint, url_prefix=prefix)
 
 
-add_api_bp(auth_controller, '/api/v1/twitter',
+add_api_bp(auth_controller, '/v1/twitter',
            [(TwitterRequestTokenResource, '/oauth/request_token'),
             (TwitterAccessTokenResource, '/oauth/access_token'),
             (TwitterProfileResource, '/users/profile_banner'),
             (TwitterAuthResource, '/login'),
             (TwitterCallbackResource, '/callback'),
             (TwitterLogoutResource, '/logout')])
-add_api_bp(user_controller, '/api/v1/users', [(UserResource, '/user'),
+add_api_bp(user_controller, '/v1/users', [(UserResource, '/user'),
                                               (TweetResource, '/sync/tweets'),
                                               (UserTimelineResource, '/sync/timeline')])
-add_api_bp(tweet_controller, '/api/v1/tweets', [(TweetSearchResource, '/search')])
+add_api_bp(tweet_controller, '/v1/tweets', [(TweetSearchResource, '/search')])

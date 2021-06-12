@@ -18,24 +18,20 @@ services:
         stdin_open: true
         build: 
             context: ./twitter-app-ui
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         environment:
             CHOKIDAR_USEPOLLING: "true"
             NODE_ENV: dev
             ENV_NAME: local
-        ports:
-            - '3000:3000'
         volumes: 
             - /usr/app/node_modules/
             - ./twitter-app-ui:/usr/app
     api:
         build:
             context: ./twitter-app-api
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         volumes: 
             - ./twitter-app-api:/usr/app
-        ports:
-            - '5000:5000'
         environment:
             FLASK_DEBUG: 1
             PYTHONUNBUFFERED: 1
@@ -47,7 +43,18 @@ services:
             - mysql_root_pwd
         depends_on:
             - db
-
+    
+    nginx:
+        restart: always
+        build: 
+            context: ./twitter-app-nginx
+            dockerfile: Dockerfile
+        ports:
+            - '3000:80'
+        depends_on: 
+            - api
+            - web
+        
 secrets:
     twitter_consumer_key:
         file: ./twitter_consumer_key.txt

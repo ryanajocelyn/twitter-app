@@ -22,6 +22,7 @@ class Config(object):
     TWITTER_URL = 'https://api.twitter.com'
     TWITTER_CONSUMER_KEY = get_secret('twitter_consumer_key')
     TWITTER_CONSUMER_SECRET = get_secret('twitter_consumer_secret')
+    BEARER_TOKEN = get_secret('TWITTER_BEARER_TOKEN')
 
 
 class DevelopmentConfig(Config):
@@ -29,8 +30,10 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PWD}@db/twtappdb?auth_plugin=mysql_native_password'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
-    BEARER_TOKEN = get_secret('TWITTER_BEARER_TOKEN')
 
 
 class ProductionConfig(Config):
-    DATABASE_URL = None
+    MYSQL_ROOT_PWD = get_secret('mysql_root_pwd')
+    SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PWD}@db/twtappdb?auth_plugin=mysql_native_password'
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_ECHO = False
