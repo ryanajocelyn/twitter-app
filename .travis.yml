@@ -1,6 +1,10 @@
 sudo: required
+language: node_js
 services:
     - docker
+
+script:
+    - echo "skipping tests"
 
 after_success:
     - docker build -t abijeethdarwin/twitter-app-ui ./twitter-app-ui
