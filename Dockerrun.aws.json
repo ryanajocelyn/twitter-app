@@ -1,0 +1,27 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [{
+        "name": "web",
+        "image": "abijeethdarwin/twitter-app-ui",
+        "hostname": "web",
+        "essential": false,
+        "memory": 128
+    }, {
+        "name": "api",
+        "image": "abijeethdarwin/twitter-app-api",
+        "hostname": "api",
+        "essential": false,
+        "memory": 128
+    }, {
+        "name": "nginx",
+        "image": "abijeethdarwin/twitter-app-nginx",
+        "hostname": "nginx",
+        "essential": true,
+        "portMappings": [{
+            "hostPort": 80,
+            "containerPort": 80
+        }],
+        "links": [ "web", "api" ],
+        "memory": 128
+    }]
+}

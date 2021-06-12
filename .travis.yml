@@ -9,11 +9,14 @@ script:
 after_success:
     - docker build -t abijeethdarwin/twitter-app-ui ./twitter-app-ui
     - docker build -t abijeethdarwin/twitter-app-api ./twitter-app-api
+    - docker build -t abijeethdarwin/twitter-app-nginx ./twitter-app-nginx
+
     # Login to Docker CLI
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # Push the docker images
     - docker push abijeethdarwin/twitter-app-ui
     - docker push abijeethdarwin/twitter-app-api
+    - docker push abijeethdarwin/twitter-app-nginx
 
 deploy:
     provider: elasticbeanstalk
