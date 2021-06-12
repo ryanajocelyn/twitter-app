@@ -6,6 +6,8 @@ services:
             - twitter_consumer_secret
             - twitter_bearer_token
             - mysql_root_pwd
+            - mysql_root_host
+            - mysql_root_user
     
 secrets:
     twitter_consumer_key:
@@ -16,3 +18,7 @@ secrets:
         file: ./twitter_bearer_token.txt
     mysql_root_pwd:
         file: ./mysql_root_pwd.txt
+    mysql_root_host:
+        file: ./mysql_root_host.txt    
+    mysql_root_user:
+        file: ./mysql_root_user.txt

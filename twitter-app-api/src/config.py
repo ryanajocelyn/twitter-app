@@ -26,8 +26,11 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
+    MYSQL_ROOT_HOST = get_secret('mysql_root_host')
+    MYSQL_ROOT_PORT = get_secret('mysql_root_port')
+    MYSQL_ROOT_USER = get_secret('mysql_root_user')
     MYSQL_ROOT_PWD = get_secret('mysql_root_pwd')
-    SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:{MYSQL_ROOT_PWD}@db:3306/twtappdb?auth_plugin=mysql_native_password'
+    SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://{MYSQL_ROOT_USER}:{MYSQL_ROOT_PWD}@{MYSQL_ROOT_HOST}:{MYSQL_ROOT_PORT}/twtappdb?auth_plugin=mysql_native_password'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
 
