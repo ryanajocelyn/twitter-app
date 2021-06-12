@@ -1,0 +1,18 @@
+version: '3'
+services:
+    api:
+        secrets:
+            - twitter_consumer_key
+            - twitter_consumer_secret
+            - twitter_bearer_token
+            - mysql_root_pwd
+    
+secrets:
+    twitter_consumer_key:
+        file: ./twitter_consumer_key.txt
+    twitter_consumer_secret:
+        file: ./twitter_consumer_secret.txt
+    twitter_bearer_token:
+        file: ./twitter_bearer_token.txt
+    mysql_root_pwd:
+        file: ./mysql_root_pwd.txt
