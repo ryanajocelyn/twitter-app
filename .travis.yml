@@ -22,7 +22,7 @@ deploy:
     provider: elasticbeanstalk
     region: "ap-south-1"
     app: "Twitter-App"
-    env: "Twitterapp-env-2"
+    env: "Twitterapp-env"
     bucket_name: "elasticbeanstalk-ap-south-1-377733686601"
     bucket_path: "twitter-app"
     on:
