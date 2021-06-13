@@ -93,8 +93,6 @@ export default function HeaderAppBar() {
             }
 
         })();
-        // window.location.href = 'http://localhost:5000/authenticate/twitter';
-        // window.location.href = 'http://localhost:5000/api/v1/auth/login';
     };
 
     useEffect(() => {
@@ -128,7 +126,6 @@ export default function HeaderAppBar() {
                     name, 
                     imageUrl: profile_image_url,
                     status
-                    //url: entities.url.urls[0].expanded_url
                 }))
             } catch (error) {
                 console.error(error);

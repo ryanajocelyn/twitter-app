@@ -1,3 +1,6 @@
+"""
+Resource for User related operations
+"""
 from flask import Blueprint, jsonify, request
 from flask_restful import reqparse, Resource
 import logger
@@ -19,6 +22,9 @@ twt_parser.add_argument('userName')
 
 
 class UserResource(Resource):
+    """
+        Get User details by screen name or user name
+    """
     def get(self):
         args = parser.parse_args()
         print(args)
@@ -26,6 +32,9 @@ class UserResource(Resource):
 
 
 class TweetResource(Resource):
+    """
+        Get Tweets by User
+    """
     def get(self):
         app.logger.info('Get Tweets By User..')
         args = twt_parser.parse_args()
@@ -34,6 +43,9 @@ class TweetResource(Resource):
 
 
 class UserTimelineResource(Resource):
+    """
+    Get Timeline Information by User
+    """
     def get(self):
         app.logger.info('Get Timeline By User..')
         args = twt_parser.parse_args()

@@ -1,3 +1,6 @@
+"""
+Authentication related API Routes
+"""
 from flask import Blueprint, Flask, jsonify, request, redirect, after_this_request
 from flask_restful import Api, Resource, reqparse
 from requests_oauthlib.oauth1_auth import Client
@@ -13,6 +16,9 @@ auth_controller = Blueprint(name="auth", import_name=__name__)
 
 
 class TwitterRequestTokenResource(Resource):
+    """
+    Resource to fetch the Request Token from Twitter
+    """
     def post(self):
         app.logger.info('OAuth: Request Token Resource..')
 
@@ -38,6 +44,9 @@ class TwitterRequestTokenResource(Resource):
 
 
 class TwitterAccessTokenResource(Resource):
+    """
+        Resource to fetch the Access Token from Twitter
+    """
     def post(self):
         app.logger.info('OAuth: Access Token Resource..')
 
@@ -57,8 +66,6 @@ class TwitterAccessTokenResource(Resource):
         res_split = res.text.split('&')
         oauth_token = res_split[0].split('=')[1]
         oauth_secret = res_split[1].split('=')[1]
-        userid = res_split[2].split('=')[1]
-        username = res_split[3].split('=')[1]
 
         res_data = {
             'oauth_token': oauth_token,
@@ -76,6 +83,9 @@ class TwitterAccessTokenResource(Resource):
 
 
 class TwitterProfileResource(Resource):
+    """
+        Resource to fetch the User Profile Information from Twitter
+    """
     def get(self):
         app.logger.info('OAuth: Request User Profile..')
 
@@ -94,23 +104,6 @@ class TwitterProfileResource(Resource):
         return None
 
 
-class TwitterAuthResource(Resource):
-    # Here we are making it so this endpoint accepts GET requests
-    def get(self):
-        app.logger.info('Authenticating..')
-
-        # We must generate our signed OAuth Headers
-        uri, headers, body = oauth.sign('https://twitter.com/oauth/request_token')
-        # We need to make a request to twitter with the OAuth parameters we just created
-        res = requests.get(uri, headers=headers, data=body)
-        # This returns a string with OAuth variables we need to parse
-        res_split = res.text.split('&')  # Splitting between the two params sent back
-        oauth_token = res_split[0].split('=')[1]  # Pulling our APPS OAuth token from the response.
-        # Now we have to redirect to the login URL using our OAuth Token
-
-        return redirect('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauth_token, 302)
-
-
 # We need to create a parser for that callback URL
 def callback_parser():
     parser = reqparse.RequestParser()
@@ -120,26 +113,10 @@ def callback_parser():
     return parser
 
 
-# Now we setup the Resource for the callback
-class TwitterCallbackResource(Resource):
-    def get(self):
-        parser = callback_parser()
-        args = parser.parse_args() # Parse our args into a dict
-
-        # We need to make a request to twitter with this callback OAuth token
-        res = requests.post('https://api.twitter.com/oauth/access_token?oauth_token=' + args['oauth_token'] + '&oauth_verifier=' + args['oauth_verifier'])
-        res_split = res.text.split('&')
-
-        # Now we need to parse our oauth token and secret from the response
-        oauth_token = res_split[0].split('=')[1]
-        oauth_secret = res_split[1].split('=')[1]
-        userid = res_split[2].split('=')[1]
-        username = res_split[3].split('=')[1]
-
-        return redirect('http://localhost:3000', 302)
-
-
 class TwitterLogoutResource(Resource):
+    """
+        Resource to process the application logout
+    """
     def post(self):
         app.logger.info('OAuth: Logout Resource..')
 

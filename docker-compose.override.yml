@@ -1,5 +1,10 @@
 version: '3'
 services:
+    db:
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        secrets:
+            - mysql_root_pwd
     api:
         secrets:
             - twitter_consumer_key
@@ -8,6 +13,7 @@ services:
             - mysql_root_pwd
             - mysql_root_host
             - mysql_root_user
+            - mysql_root_port
     
 secrets:
     twitter_consumer_key:
@@ -22,3 +28,5 @@ secrets:
         file: ./mysql_root_host.txt    
     mysql_root_user:
         file: ./mysql_root_user.txt
+    mysql_root_port:
+        file: ./mysql_root_port.txt

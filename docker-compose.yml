@@ -6,8 +6,7 @@ services:
         restart: always
         command: --default-authentication-plugin=mysql_native_password
         environment:
-            MYSQL_ROOT_PASSWORD: 'root'
-            MYSQL_DATABASE: twt-app-db
+            MYSQL_DATABASE: twtappdb
         volumes:
             - ./twitter-app-db/data:/var/lib/mysql
             - ./twitter-app-db/config:/etc/mysql/conf.d
